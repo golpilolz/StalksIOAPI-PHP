@@ -4,12 +4,14 @@ namespace Golpilolz\StalksIOAPI;
 
 use Golpilolz\StalksIOAPI\Model\Friend;
 use Golpilolz\StalksIOAPI\Model\Passport;
+use Golpilolz\StalksIOAPI\Model\User\Profile;
 use Golpilolz\StalksIOAPI\Model\Week;
 use GuzzleHttp\Client;
 
 class StalksIOApi {
   const API_URL = "https://stalks.io/api/";
   const DATE_FORMAT = "Y-m-d";
+  const FAILED_CREATE_JSON_EXCEPTION = 2;
 
   /** @var string */
   private $token;
@@ -81,17 +83,18 @@ class StalksIOApi {
   // End Friends
 
   // User Profile
+  public function getUserProfile(string $username): Profile {
+    $res = $this->guzzleClient->get('stalks/profile/' . $username);
+
+    return Profile::create($res->getBody());
+  }
+
   public function updatePassport(Passport $passport) {
     $res = $this->guzzleClient->post('accounts/update_passport', [
-      'query' => [
-        'username' => $passport->getUsername(),
-        'villager_name' => $passport->getVillagerName(),
-        'town_name' => $passport->getTownName(),
-        'friend_code' => $passport->getFriendCode(),
-        'bought_local' => $passport->isBoughtLocal(),
-        'patron_lowkey' => $passport->isPatronLowkey()
-      ]
+      'body' => $passport->toJson()
     ]);
+
+    var_dump($res->getBody());
   }
   // End User Profile
 }

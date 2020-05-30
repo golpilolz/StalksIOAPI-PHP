@@ -4,7 +4,7 @@ namespace Golpilolz\StalksIOAPI\Model;
 
 use Golpilolz\StalksIOAPI\StalksIOApi;
 
-class Week implements StalksIOModel{
+class Week implements StalksIOModelInterface{
   /** @var int */
   private $id;
 

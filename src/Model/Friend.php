@@ -2,7 +2,7 @@
 
 namespace Golpilolz\StalksIOAPI\Model;
 
-class Friend implements StalksIOModel {
+class Friend implements StalksIOModelInterface {
   /** @var int */
   private $id;
 
