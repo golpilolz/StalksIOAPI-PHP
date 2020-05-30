@@ -2,7 +2,9 @@
 
 namespace Golpilolz\StalksIOAPI\Model;
 
-class Week {
+use Golpilolz\StalksIOAPI\StalksIOApi;
+
+class Week implements StalksIOModel{
   /** @var int */
   private $id;
 
@@ -36,15 +38,17 @@ class Week {
   /** @var int */
   private $version;
 
-  public function __construct() {
-
-  }
-
   public static function create(string $jsonObject): Week {
-    var_dump(json_decode($jsonObject));
+    $jsonDecoded = json_decode($jsonObject);
 
     $week = new self();
-    $week->setId('');
+    $week->setId(intval($jsonDecoded->id));
+    $week->setDate(\DateTime::createFromFormat(StalksIOApi::DATE_FORMAT, $jsonDecoded->date));
+    $week->setFirstTimeBuy(boolval($jsonDecoded->buy_local_first_time));
+    $week->setLocalPrice(intval($jsonDecoded->local_price));
+    $week->setManualPreviousPattern(intval($jsonDecoded->manual_previous_pattern));
+    $week->setProfit(intval($jsonDecoded->profit));
+    $week->setVersion(intval($jsonDecoded->version));
     return $week;
   }
 
