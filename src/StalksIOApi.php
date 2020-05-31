@@ -5,6 +5,7 @@ namespace Golpilolz\StalksIOAPI;
 use Golpilolz\StalksIOAPI\Model\Friend;
 use Golpilolz\StalksIOAPI\Model\Passport;
 use Golpilolz\StalksIOAPI\Model\User\Profile;
+use Golpilolz\StalksIOAPI\Model\User\User;
 use Golpilolz\StalksIOAPI\Model\Week;
 use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
@@ -88,6 +89,12 @@ class StalksIOApi {
     $res = $this->guzzleClient->get('stalks/profile/' . $username);
 
     return Profile::create($res->getBody());
+  }
+
+  public function currentUser(): User {
+    $res = $this->guzzleClient->get('accounts/current_user/');
+
+    return User::create($res->getBody());
   }
 
   public function updatePassport(Passport $passport) {
