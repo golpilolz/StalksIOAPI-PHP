@@ -7,6 +7,7 @@ use Golpilolz\StalksIOAPI\Model\Passport;
 use Golpilolz\StalksIOAPI\Model\User\Profile;
 use Golpilolz\StalksIOAPI\Model\Week;
 use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
 
 class StalksIOApi {
   const API_URL = "https://stalks.io/api/";
@@ -90,11 +91,11 @@ class StalksIOApi {
   }
 
   public function updatePassport(Passport $passport) {
-    $res = $this->guzzleClient->post('accounts/update_passport', [
-      'body' => $passport->toJson()
+    $res = $this->guzzleClient->post('accounts/update_passport/', [
+      RequestOptions::JSON => $passport->toArray()
     ]);
 
-    var_dump($res->getBody());
+    echo $res->getBody();
   }
   // End User Profile
 }

@@ -2,8 +2,6 @@
 
 namespace Golpilolz\StalksIOAPI\Model;
 
-use Golpilolz\StalksIOAPI\Exception\JSONCreateException;
-
 class Passport implements StalksIOSendToApiInterface, StalksIOModelInterface {
   /** @var string */
   private $username;
@@ -39,24 +37,17 @@ class Passport implements StalksIOSendToApiInterface, StalksIOModelInterface {
 
   /**
    * Create JSON string from current object
-   * @return string
-   * @throws JSONCreateException
+   * @return array
    */
-  public function toJson(): string {
-    $jsonObject = json_encode([
+  public function toArray(): array {
+    return [
       "username" => $this->getUsername(),
       "villager_name" => $this->getVillagerName(),
       "town_name" => $this->getTownName(),
       "friend_code" => $this->getFriendCode(),
       "bought_local" => $this->isBoughtLocal(),
       "patron_lowkey" => $this->isPatronLowkey(),
-    ]);
-
-    if (!$jsonObject) {
-      throw new JSONCreateException();
-    }
-
-    return $jsonObject;
+    ];
   }
 
   /**
