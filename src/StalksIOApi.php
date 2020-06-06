@@ -13,7 +13,6 @@ use GuzzleHttp\RequestOptions;
 class StalksIOApi {
   const API_URL = "https://stalks.io/api/";
   const DATE_FORMAT = "Y-m-d";
-  const FAILED_CREATE_JSON_EXCEPTION = 2;
 
   /** @var string */
   private $token;

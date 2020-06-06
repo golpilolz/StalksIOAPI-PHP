@@ -2,6 +2,7 @@
 
 namespace Golpilolz\StalksIOAPI\Model;
 
+use Exception;
 use Golpilolz\StalksIOAPI\StalksIOApi;
 
 class Week implements StalksIOModelInterface{
@@ -11,6 +12,7 @@ class Week implements StalksIOModelInterface{
   /** @var \DateTime */
   private $date;
 
+  /** @var Buy[] */
   private $buys;
 
   /** @var bool */
@@ -31,6 +33,7 @@ class Week implements StalksIOModelInterface{
   /** @var int */
   private $profit;
 
+  /** @var string */
   private $advice;
 
   private $friendWeeks;
@@ -38,16 +41,25 @@ class Week implements StalksIOModelInterface{
   /** @var int */
   private $version;
 
+  /**
+   * @param string $jsonObject
+   * @return Week
+   * @throws Exception
+   */
   public static function create(string $jsonObject): Week {
     $jsonDecoded = json_decode($jsonObject);
 
-    $week = new self();
+    $week = new static();
     $week->setId(intval($jsonDecoded->id));
     $week->setDate(\DateTime::createFromFormat(StalksIOApi::DATE_FORMAT, $jsonDecoded->date));
+    $week->setBuys(Buy::createMultiple($jsonObject));
     $week->setFirstTimeBuy(boolval($jsonDecoded->buy_local_first_time));
+    $week->setSells(Sell::createMultiple($jsonObject, $week->getDate()));
     $week->setLocalPrice(intval($jsonDecoded->local_price));
+    $week->setPrices($jsonDecoded->prices);
     $week->setManualPreviousPattern(intval($jsonDecoded->manual_previous_pattern));
     $week->setProfit(intval($jsonDecoded->profit));
+    $week->setAdvice(Advice::create($jsonObject));
     $week->setVersion(intval($jsonDecoded->version));
     return $week;
   }
@@ -92,10 +104,10 @@ class Week implements StalksIOModelInterface{
   }
 
   /**
-   * @param mixed $buys
+   * @param Buy[] $buys
    * @return Week
    */
-  public function setBuys($buys) {
+  public function setBuys(array $buys) {
     $this->buys = $buys;
     return $this;
   }
