@@ -2,6 +2,8 @@
 
 namespace Golpilolz\StalksIOAPI\Model;
 
+use Golpilolz\StalksIOAPI\StalksIOApiTools;
+
 class Advice implements StalksIOModelInterface {
   /** @var array */
   private $odds;
@@ -19,9 +21,10 @@ class Advice implements StalksIOModelInterface {
     $jsonDecoded = json_decode($jsonObject)->advice;
 
     $advice = new static();
-    $advice->setOdds(json_decode(json_encode($jsonDecoded->odds), true));
+    $advice->setOdds(StalksIOApiTools::stdClassToArray($jsonDecoded->odds));
     $advice->setSell(boolval($jsonDecoded->sell));
     $advice->setAdvice($jsonDecoded->advice);
+    $advice->setPrediction(Prediction::create($jsonObject));
     return $advice;
   }
 
@@ -70,6 +73,22 @@ class Advice implements StalksIOModelInterface {
    */
   public function setAdvice(string $advice): Advice {
     $this->advice = $advice;
+    return $this;
+  }
+
+  /**
+   * @return mixed
+   */
+  public function getPrediction() {
+    return $this->prediction;
+  }
+
+  /**
+   * @param mixed $prediction
+   * @return Advice
+   */
+  public function setPrediction($prediction) {
+    $this->prediction = $prediction;
     return $this;
   }
 }

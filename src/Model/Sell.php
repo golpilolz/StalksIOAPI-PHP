@@ -41,7 +41,7 @@ class Sell implements StalksIOModelInterface {
 
     foreach ($jsonDecoded->sells as $value) {
       $sell = self::create(json_encode($value));
-      $sell->initSellDay($currentWeek);
+      $sell->initSellDay(clone $currentWeek);
       $sells[] = $sell;
     }
 
