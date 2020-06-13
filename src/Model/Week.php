@@ -36,6 +36,7 @@ class Week implements StalksIOModelInterface{
   /** @var string */
   private $advice;
 
+  /** @var FriendWeek[] */
   private $friendWeeks;
 
   /** @var int */
@@ -60,6 +61,7 @@ class Week implements StalksIOModelInterface{
     $week->setManualPreviousPattern(intval($jsonDecoded->manual_previous_pattern));
     $week->setProfit(intval($jsonDecoded->profit));
     $week->setAdvice(Advice::create($jsonObject));
+    $week->setFriendWeeks(FriendWeek::createMultiple($jsonObject));
     $week->setVersion(intval($jsonDecoded->version));
     return $week;
   }
@@ -241,17 +243,17 @@ class Week implements StalksIOModelInterface{
   }
 
   /**
-   * @return mixed
+   * @return FriendWeek[]
    */
-  public function getFriendWeeks() {
+  public function getFriendWeeks(): array {
     return $this->friendWeeks;
   }
 
   /**
-   * @param mixed $friendWeeks
+   * @param FriendWeek[] $friendWeeks
    * @return Week
    */
-  public function setFriendWeeks($friendWeeks) {
+  public function setFriendWeeks(array $friendWeeks): Week {
     $this->friendWeeks = $friendWeeks;
     return $this;
   }

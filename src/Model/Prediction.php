@@ -12,11 +12,20 @@ class Prediction implements StalksIOModelInterface {
   /** @var array */
   private $possible;
 
+  public function __construct() {
+    $this->likely = [];
+    $this->possible = [];
+  }
+
   public static function create(string $jsonObject): Prediction {
-    $jsonDecoded = json_decode($jsonObject)->advice->prediction;
+    $jsonDecoded = json_decode($jsonObject);
     $prediction = new static();
-    $prediction->setLikely(StalksIOApiTools::stdClassToArray($jsonDecoded->likely));
-    $prediction->setPossible(StalksIOApiTools::stdClassToArray($jsonDecoded->possible));
+    if (!is_null($jsonDecoded->likely)) {
+      $prediction->setLikely(StalksIOApiTools::stdClassToArray($jsonDecoded->likely));
+    }
+    if (!is_null($jsonDecoded->possible)) {
+      $prediction->setPossible(StalksIOApiTools::stdClassToArray($jsonDecoded->possible));
+    }
     return $prediction;
   }
 

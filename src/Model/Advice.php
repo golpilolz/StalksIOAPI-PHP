@@ -14,17 +14,29 @@ class Advice implements StalksIOModelInterface {
   /** @var string */
   private $advice;
 
-  /** @var  */
+  /** @var Prediction */
   private $prediction;
+
+  public function __construct() {
+    $this->odds = [];
+
+    $this->prediction = new Prediction();
+  }
 
   public static function create(string $jsonObject): Advice {
     $jsonDecoded = json_decode($jsonObject)->advice;
 
     $advice = new static();
-    $advice->setOdds(StalksIOApiTools::stdClassToArray($jsonDecoded->odds));
+    if (!is_null($jsonDecoded->odds)) {
+      $advice->setOdds(StalksIOApiTools::stdClassToArray($jsonDecoded->odds));
+    }
+
     $advice->setSell(boolval($jsonDecoded->sell));
     $advice->setAdvice($jsonDecoded->advice);
-    $advice->setPrediction(Prediction::create($jsonObject));
+
+    if (!is_null($jsonDecoded->prediction)) {
+      $advice->setPrediction(Prediction::create($jsonObject));
+    }
     return $advice;
   }
 
