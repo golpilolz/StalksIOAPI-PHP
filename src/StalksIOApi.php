@@ -29,6 +29,11 @@ class StalksIOApi {
   }
 
   // Weeks
+
+  /**
+   * Get current Week
+   * @return Week
+   */
   public function currentWeek(): Week {
     $now = new \DateTime();
     $now->modify('last Sunday');
@@ -36,6 +41,11 @@ class StalksIOApi {
   }
 
   public function week(\DateTime $dateTime): Week {
+
+    if (intval($dateTime->format('N')) !== 7) {
+      $dateTime->modify('last Sunday');
+    }
+
     $res = $this->guzzleClient->get('stalks/weeks/by_date', [
       'query' => [
         'date' => $dateTime->format(self::DATE_FORMAT)
@@ -64,6 +74,11 @@ class StalksIOApi {
   // End Weeks
 
   // Friends
+  /**
+   * List all user's friends
+   *
+   * @return array
+   */
   public function friends(): array {
     $res = $this->guzzleClient->get('accounts/friends');
 
